@@ -2,9 +2,12 @@ package com.example.book_my_show.Models;
 
 import com.example.book_my_show.Enums.ShowType;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -16,6 +19,8 @@ import java.util.*;
 @Entity
 @Table(name = "shows")
 @NoArgsConstructor
+@Builder
+@AllArgsConstructor
 public class Show {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -31,7 +36,7 @@ public class Show {
     @CreationTimestamp
     private Date createdOn;
 
-    @CreationTimestamp
+    @UpdateTimestamp
     private Date updateOn;
 
     //This is child wrt to the movieEntity
@@ -46,9 +51,9 @@ public class Show {
 
 
     //Show is parent wrt to ticket
-    @OneToMany(mappedBy = "showEntity",cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "show",cascade = CascadeType.ALL)
     private List<Ticket> listOfBookedTickets = new ArrayList<>();
 
-    @OneToMany(mappedBy = "showEntity",cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "show",cascade = CascadeType.ALL)
     private List<ShowSeat> listOfShowSeats = new ArrayList<>();
 }
