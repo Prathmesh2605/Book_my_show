@@ -1,6 +1,8 @@
-package com.example.book_my_show;
+package com.example.book_my_show.Controller;
 
 
+import com.example.book_my_show.EntryDto.TicketEntryDto;
+import com.example.book_my_show.Services.TicketService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
