@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.example.book_my_show.convertors.*;
 
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -71,8 +72,18 @@ public class ShowService {
 
 
 
-        //Now the goal is to create the ShowSeat
-        //We need to set its attribute
+        /*Now the goal is to create the showSeatEntity
+         * and for that we need to set all the attributes of showSeatEntity
+         *
+         * Following are the attributes of showSeatEntity :-
+         * isBooked
+         * price
+         * seatNo
+         * seatType
+         * bookedAt
+         * showEntity
+         *
+         * */
 
         Theatre Theatre = Show.getTheatre();
 
@@ -101,5 +112,14 @@ public class ShowService {
 
         return  seatEntityList;
 
+    }
+
+    public String removeShow(int showId){
+        Show showEntity = showRepository.findById(showId).get();
+        if(showEntity.getShowTime().compareTo(LocalTime.now())>0){
+            return "CANCELED";
+        }
+        showRepository.deleteById(showId);
+        return "REMOVED";
     }
 }

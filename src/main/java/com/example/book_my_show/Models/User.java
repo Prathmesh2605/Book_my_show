@@ -27,8 +27,8 @@ public class User {
     private String address;
     private int age;
 
-    @OneToMany(mappedBy = "User")
-    List<Ticket> bookedTickets;
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    List<Ticket> ticketList = new ArrayList<>();
 
 
 }

@@ -1,8 +1,10 @@
 package com.example.book_my_show.Services;
 
 import com.example.book_my_show.EntryDto.TicketEntryDto;
+import com.example.book_my_show.Enums.TicketStatus;
 import com.example.book_my_show.Models.*;
 import com.example.book_my_show.Repositories.*;
+import com.example.book_my_show.ResponseDto.TicketDetailsResponseDto;
 import com.example.book_my_show.convertors.TicketConvertor;
 import jakarta.mail.internet.MimeMessage;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,7 +14,8 @@ import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 
-import javax.mail.*;
+//import javax.mail.*;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
@@ -95,9 +98,9 @@ public class TicketService {
         showRepository.save(show);
 
 
-        List<Ticket> TicketList1 = user.getBookedTickets();
+        List<Ticket> TicketList1 = user.getTicketList();
         TicketList1.add(Ticket);
-        user.setBookedTickets(TicketList1);
+        user.setTicketList(TicketList1);
 
         userRepository.save(user);
 
@@ -158,5 +161,40 @@ public class TicketService {
         //All the seats requested were available
         return true;
 
+    }
+    private void cancelBookingOfSeats(String[] bookedSeatsArr, List<ShowSeat> showSeatEntityList) {
+        for(ShowSeat showSeatEntity : showSeatEntityList){
+            String seatNo = showSeatEntity.getSeatNo();
+            if(Arrays.asList(bookedSeatsArr).contains(seatNo)){
+                showSeatEntity.setBooked(false);
+            }
+        }
+    }
+    public String cancelTicket(int ticketId){
+        Ticket ticketEntity = ticketRepository.findById(ticketId).get();
+
+        String bookedSeats = ticketEntity.getBookedSeats();
+        String[] bookedSeatsArr = bookedSeats.split(", ");
+
+        Show showEntity = ticketEntity.getShow();
+        List<ShowSeat> showSeatEntityList = showEntity.getListOfShowSeats();
+
+        cancelBookingOfSeats(bookedSeatsArr,showSeatEntityList);
+
+        bookedSeats = Arrays.toString(bookedSeatsArr);
+        ticketEntity.setBookedSeats(bookedSeats);
+
+        ticketEntity.setStatus(TicketStatus.CANCELLED);
+        ticketEntity.setBookedSeats(null);
+
+        showRepository.save(showEntity);
+
+        return "Ticket is cancelled";
+
+    }
+
+    public TicketDetailsResponseDto getDetails(int ticketId){
+        Ticket ticketEntity = ticketRepository.findById(ticketId).get();
+        return TicketConvertor.convertEntityToDto(ticketEntity);
     }
 }

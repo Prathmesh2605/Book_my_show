@@ -2,12 +2,12 @@ package com.example.book_my_show.Controller;
 
 
 import com.example.book_my_show.EntryDto.TicketEntryDto;
+import com.example.book_my_show.ResponseDto.TicketDetailsResponseDto;
 import com.example.book_my_show.Services.TicketService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/ticket")
@@ -29,5 +29,17 @@ public class TicketController {
         }
 
 
+    }
+
+   @GetMapping("/get-ticket-details")
+    public ResponseEntity<TicketDetailsResponseDto> getDetails(@RequestParam("ticketId") int ticketId){
+        TicketDetailsResponseDto ticketDetailsResponseDto = ticketService.getDetails(ticketId);
+        return new ResponseEntity<>(ticketDetailsResponseDto, HttpStatus.FOUND);
+    }
+
+    @DeleteMapping("/cancel_ticket")
+    public ResponseEntity<String> cancelTicket(@RequestParam("ticketId") int ticketId){
+        String response = ticketService.cancelTicket(ticketId);
+        return new ResponseEntity<>(response,HttpStatus.ACCEPTED);
     }
 }

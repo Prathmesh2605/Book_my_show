@@ -8,7 +8,7 @@ import lombok.Data;
 
 @Data
 public class MovieEntryDto {
-    private String name;
+    private String movieName;
 
     private double rating;
     private int duration;

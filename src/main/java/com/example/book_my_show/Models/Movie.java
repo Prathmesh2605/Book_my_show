@@ -34,6 +34,6 @@ public class Movie {
     private Genre genre;
 
     //this is parent wrt to shows
-    @OneToMany(mappedBy = "movie",cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "movie",cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     private List<Show> showList = new ArrayList<>();
 }

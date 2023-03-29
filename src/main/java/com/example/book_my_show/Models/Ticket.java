@@ -1,7 +1,9 @@
 package com.example.book_my_show.Models;
 
+import com.example.book_my_show.Enums.TicketStatus;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -13,6 +15,7 @@ import java.util.UUID;
 @Entity
 @Table(name = "ticket")
 @NoArgsConstructor
+@Builder
 @AllArgsConstructor
 public class Ticket {
 
@@ -29,6 +32,10 @@ public class Ticket {
     private LocalDate showDate;
     private String theatreName;
     private String bookedSeats;
+
+    @Enumerated(value = EnumType.STRING)
+    private TicketStatus status;
+
     @ManyToOne
     @JoinColumn
     private User user;

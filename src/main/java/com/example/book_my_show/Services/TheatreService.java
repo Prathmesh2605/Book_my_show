@@ -64,4 +64,8 @@ public class TheatreService {
         return theatreSeatList;
 
     }
+    public String removeTheater(int theaterId){
+        theatreRepository.deleteById(theaterId);
+        return "Theater removed successfully";
+    }
 }
